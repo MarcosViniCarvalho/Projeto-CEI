@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Processando Digital</title>
+
+    <style>
+        .bg-azul{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoB.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+
+        }
+        .bg-vermelho{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoR.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+        .bg-verde{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoV.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+        <div class="container-meio">
+            <div class="titulo-meio botao-fundo">
+                <a link-cartao >Aguarde a leitura ser concluída. Não retire o cartão. </a>
+            </div>
+        </div>
+    </div>
+    <script>
+        //modificando o comportamento do cartão
+        const link = document.querySelector('[link-cartao]')
+        const fundo = document.querySelector('[cor-fundo]')
+
+        /*Processamento do cartão*/
+        /* function testeLogico (){
+            // SEGUIR PARA O MENU
+            
+            let num = Math.floor(Math.random() * 5)
+
+            if(num < 4){
+            fundo.classList.remove("bg-azul", "bg-vermelho")
+            fundo.classList.add("bg-verde")
+            
+            link.innerHTML = "Sucesso na leitura do cartão!"
+
+            setTimeout(function (){
+                window.location.href = "menu.html"
+            },4000)
+
+        }else{
+            // VOLTAR A TELA BEM VINDO 
+            fundo.classList.remove("bg-azul", "bg-verde")
+            fundo.classList.add("bg-vermelho")
+
+            link.innerHTML = "Erro na leitura, retire o cartão e aguarde um momento"
+
+            setTimeout(function (){
+                window.location.href = "index.html"
+            },4000)
+
+            }
+        } */
+
+        link.onclick = function (e){
+
+            //testeLogico()
+            fundo.classList.remove('bg-azul')
+            fundo.classList.add('bg-vermelho')
+
+            link.innerHTML = 'Não foi possível ler o cartão! Siga as instruções a seguir :'
+            setTimeout( function(){
+                window.location.href = 'authUser.html'
+            }, 4000)
+        }
+    </script>
+</body>
+</html>

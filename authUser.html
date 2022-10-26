@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .bg-azul{
+        width: 100vw;
+        height: 100vh;
+        background: url("img/FundoB.png") no-repeat center;
+        background-color: rgb(27, 255, 255);
+        background-size: cover;
+
+    }
+    .bg-vermelho{
+        width: 100vw;
+        height: 100vh;
+        background: url("img/FundoR.png") no-repeat center;
+        background-color: rgb(27, 255, 255);
+        background-size: cover;
+    }
+    .bg-verde{
+        width: 100vw;
+        height: 100vh;
+        background: url("img/FundoV.png") no-repeat center;
+        background-color: rgb(27, 255, 255);
+        background-size: cover;
+    }
+    </style>
+    <title>Autenticação Usuario</title>
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+        <div class="container-lateral">
+            <section secao-auth>
+                <div>
+                    <p titulo-auth class="botao-fundo">Primeiro, digite o NÚMERO DA CONTA conforme mostrado na imagem SEM OS ZEROS</p>
+                </div>
+
+                <div secao-conteudo-auth>
+                    <img id="img-cartao" img-exe src="img/NumConta.png" alt="NumConta"/>
+                    
+                    <section class="container-inpt-auth">
+                        <input id='input-auth' type="text" autofocus maxlength="6"></input>
+                    </section>
+                </div>
+
+                <div secao-btn-auth>
+                    <button btn-auth type="submit" class="botao-fundo">Avançar</button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+
+        const titulo = document.querySelector('[titulo-auth]')
+        const img = document.querySelector('img-exe')
+        const input = document.querySelector('#input-auth')
+
+
+        const corFundo = document.querySelector('[cor-fundo]')
+        const secao = document.querySelector('[secao-auth]')
+        const oldMenu = secao.innerHTML
+        const secaoAuth = document.querySelector('[secao-btn-auth]')//apenas para uso pessoal
+        const btn = document.querySelector('[btn-auth]')
+        
+
+        let authFase = '1'
+
+        //se a sessão for diferente de 2 ou 3
+
+        if(sessionStorage.authFase != '2' && sessionStorage.authFase != '3'){
+            console.log(sessionStorage.authFase)
+            sessionStorage.authFase = authFase
+        }
+
+        //1 auth da conta /2 auth do cod do cartao /3 auth da dataval
+        
+        let varTeste = 0
+
+        //Autenticando e armazenando o cliente na sessionStorage
+
+
+        switch(sessionStorage.authFase){
+
+            case '1': {
+               
+                btn.onclick = e => {
+            
+                e.preventDefault()
+                varTeste = input.value
+                //AUTENTICAÇÃO DA CONTA   
+                getClientes({
+                
+                //"banco de dados"
+                url : 'miniBD/dados.xml',
+                metodo: "get",
+                sucesso(resp){
+
+                    //obtendo os clientes
+                    const dados = resp.getElementsByTagName('cliente')
+
+                    let clientes = []
+                    //criando um array dos dados coletados
+                    const itens = Array.from(dados).forEach(cliente => {
+                        //colocando os dados em um array temporario
+                        clientes.push({
+                                    conta : cliente.attributes.conta.value, 
+                                    cod : cliente.attributes.cod.value,
+                                    dataval : cliente.attributes.dataval.value, 
+                                    codSeg : cliente.attributes.codseg.value, 
+                                    nome : cliente.attributes.nome.value, 
+                                    senha : cliente.attributes.senha.value,
+                                    saldoCC : cliente.attributes.saldoCC.value,
+                                    saldoCP : cliente.attributes.saldoCP.value, })
+                    })
+
+                    if(clientes.find(cliente => cliente.conta === varTeste) != undefined){
+
+                        sessionStorage.clear() //limpar a sessão
+                        //Cliente existente
+                        //vai receber o objeto cliente encontrado
+
+                        const usuario = clientes.find(cliente => cliente.conta === varTeste) 
+
+                        /*setando os valores, session não recebe um objeto que possa ser manipulavel*/
+                        sessionStorage.usConta = usuario.conta
+                        sessionStorage.usCod = usuario.cod
+                        sessionStorage.usDataval = usuario.dataval
+                        sessionStorage.usCodSeg = usuario.codSeg
+                        sessionStorage.usNome = usuario.nome
+                        sessionStorage.usSenha = usuario.senha
+                        sessionStorage.usSaldoCC = usuario.saldoCC
+                        sessionStorage.usSaldoCP = usuario.saldoCP
+
+                        sessionStorage.authFase = 2
+                        
+                        msgSucess('CONTA confirmada! Siga para a próxima instrução.', 'authUser.html')
+
+                    }else{
+                        //Erro na autenticação da conta
+
+                        msgErro('Número da CONTA não encontrado! Tente novamente.')
+
+                    }
+
+                }
+            
+            })
+            }
+
+                    break;
+                }
+                
+            case '2': {
+                    //Autenticação da DATAFVAL
+                    //desenhando a tela....
+                    segundaTelaAuth()
+
+                    btn.onclick = e => {
+            
+                    e.preventDefault()
+                    varTeste = input.value
+
+                    //Verificando...
+                    if(sessionStorage.usDataval == varTeste){
+
+                        //SUCESSO NA AUTENTICAÇÃO DA DATAVAL
+                        sessionStorage.authFase = 3
+
+                        msgSucess('DATA DE VALIDADE do cartão confirmada! Siga para a ultima instrução.', 'authUser.html')
+                    }else{
+                        //ERRO NA AUTENTICAÇÃO DA DATAVAL
+                        msgErro('Você digitou a DATA DE VALIDADE errada! Tente novamente.')
+                    }
+                    }
+                    break;
+                }
+            case '3': {
+
+                //Atenticação dos 4 ultimos digitos do cartão
+                terceiraTelaAuth()
+
+                btn.onclick = e => {
+            
+                e.preventDefault()
+                varTeste = input.value
+
+                //Verificando...
+                if(sessionStorage.usCod == varTeste){
+
+                //SUCESSO NA AUTENTICAÇÃO DOS NÚMEROS DO CARTÃO
+                //segui para o menu!
+                    sessionStorage.tentativas = 3
+                    msgSucess('Tudo certo! Siga para o menu principal', 'menu.html')
+                }else{
+                    //ERRO NA AUTENTICAÇÃO DA DATAVAL
+                    msgErro('Você digitou errado OS 4 ÚLTIMOS NÚMEROS DO CARTÃO! Tente novamente.')
+                }
+
+
+            } 
+            break;           
+        }
+    }
+            
+        
+
+        //XMLHTTPREQUEST
+        function getClientes(config){
+            const xhr = new XMLHttpRequest()
+
+            xhr.open (config.metodo, config.url, true)
+
+            //Parte cruicial para a requisição
+            xhr.onreadystatechange = e => {
+            //4 = requisição finalizada e resposta pronta
+                if(xhr.readyState === 4) {
+                    if(xhr.status === 200) {
+                        config.sucesso(xhr.responseXML)//vai retornar uma mini DOM, um objeto todo resolvido como resposta
+                    } else if (xhr.status >= 400) {
+                        config.erro({
+                            //objeto de erro
+                            codigo: xhr.status,
+                            texto: xhr.statusText
+                        })
+                    }
+                }
+           }
+
+            xhr.send()
+        }
+
+        
+    //Mensagem de erro apos cada falha na autenticação : nivel 1 , 2 ou 3
+    function msgErro(texto){
+        secao.innerHTML = ''
+
+        const text = document.createElement('p')
+        text.innerText = texto
+        text.classList.add('botao-fundo')
+        secao.appendChild(text)
+
+        corFundo.classList.remove('bg-azul', 'bg-verde')
+        corFundo.classList.add('bg-vermelho')
+
+        setTimeout( function(){ 
+
+            window.location.href = 'authUser.html'
+            
+        }, 4000)
+        }
+    
+        //mensagem chamada a cada operação bem sucedida
+    function msgSucess(texto, url){
+        secao.innerHTML = ''
+
+        const text = document.createElement('p')
+        text.innerText = texto
+        text.classList.add('botao-fundo')
+        secao.appendChild(text)
+
+        corFundo.classList.remove('bg-azul', 'bg-vermelho')
+        corFundo.classList.add('bg-verde')
+
+        setTimeout( function(){ 
+
+        window.location.href = url
+
+        }, 4000)
+    }
+
+    //Desenhando a tela de autenticação da DATAVAL
+    function segundaTelaAuth(){
+        input.value = ''
+        input.setAttribute('maxlength', 4)
+        titulo.innerHTML = 'Agora, digite a DATA DE VALIDADE do cartão. Ela pode ser encontrada no local indicado na imagem.'
+
+        /*mudando a imagem de fundo - cartão*/
+        document.getElementById('img-cartao').src = 'img/NumDataVal.png'
+    }
+
+    function terceiraTelaAuth(){
+        input.value = ''
+        input.setAttribute('maxlength', 4)
+        titulo.innerHTML = 'Para finalizar, digite os 4 ultimos NÚMEROS DO CARTÃO que podem ser encontrados no local indicado na imagem'
+
+        /*mudando a imagem de fundo - cartão*/
+        document.getElementById('img-cartao').src = 'img/Num4Ultimos.png'
+    }
+    </script>
+</body>
+</html>

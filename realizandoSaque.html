@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Realizando Saque</title>
+    <style>
+        .bg-azul{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoB.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+
+        }
+        .bg-vermelho{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoR.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+        .bg-verde{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoV.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+                <div container-tela-saque-pos class="container-meio">
+
+                    <div titulo-saque-pos> <!-- 1 -->
+                            <p link-sq-titulo class="botao-fundo">Escolha uma das opções de <em>SAQUE</em> ou digite um valor. 
+                                O valor não pode passar de R$ 1.000 e deve ser <em>MÚLTIPLO</em> de um dos valores exibidos abaixo :</a>
+                    </div>
+
+                    <div container-menu-numeros >
+                        <section menu-numeros-esqueda><!-- 2 -->
+                                <button btn-opc-sq type="button" class="botao-fundo" value="20">20</button>
+                                <button btn-opc-sq type="button" class="botao-fundo" value="50">50</button>
+                                <button btn-opc-sq type="button" class="botao-fundo"value="100">100</button>
+                        </section>
+
+                        <section painel-meio-digitavel>
+                                <input id="inpt-sq" type="text" autofocus maxlength="4">
+                        </section><!-- 3 -->
+
+                        <section menu-numeros-direita><!-- 4 -->
+                                <button btn-opc-sq type="button" class="botao-fundo" value="150">150</button>
+                                <button btn-opc-sq type="button" class="botao-fundo" value="200">200</button>
+                                <button btn-opc-sq type="button" class="botao-fundo" value="250">250</button>
+                        </section>
+                    </div>
+                    <div sair-saque class="div-menu"> <!-- 3 -->
+                                <a link-sq-voltar href="menu.html" class="botao-fundo">Voltar</a>
+                                <a link-sq-finalizar href="" class="botao-fundo">Avançar</a>
+                    </div>
+
+                </div>
+
+    </div>
+    <script>
+
+
+        const input = document.getElementById('inpt-sq')
+        const btnProx = document.querySelector('[link-sq-finalizar]')
+        const secao = document.querySelector('[container-tela-saque-pos]')
+        const corFundo = document.querySelector('[cor-fundo]')
+
+        const sairSaqueBox = document.querySelector('[sair-saque]')
+
+        const linkVlt = document.querySelector('[link-sq-voltar]')
+        const linkFim = document.querySelector('[link-sq-finalizar]')
+
+        let tipoConta = ''
+
+        if(sessionStorage.op == 1){tipoConta = 'CONTA CORRENTE'}
+        if(sessionStorage.op == 2){tipoConta = 'CONTA POUPANÇA'}
+
+        const valoresDfnds = []
+
+        let valorPre = 0
+        //verificando links da pagina....
+        document.querySelectorAll('[btn-opc-sq]').forEach( links => {
+
+            valoresDfnds.push(parseInt(links.value))
+
+            links.onclick = e => {
+                valorPre = links.value
+                input.value = valorPre
+
+            } 
+        })
+
+        btnProx.onclick = e => {
+            controle = true
+            e.preventDefault()
+
+            //Verificação se a caixa está vazia
+            if(input.value != ''){
+                let controle = false
+
+                //verificando se o valor difinido
+                for(let x in valoresDfnds){
+                    //Se for um valor divisivel por algum dos pré-definidos
+                    if(input.value%valoresDfnds[x] == 0){
+                        controle = true
+                    }
+                }
+
+                //A variavel controle é verdadeira caso o valor for correto
+                if(controle){
+                    valorPre = input.value
+                        //Caixa não vazia, seguir para a autenticação
+                    if(valorPre <= 1000){
+                        telaAuth()
+                    }else{
+                        dadosIncorretos('O valor não pode ser maior que R$ 1.000')
+                    }
+                        
+                }else{
+                    dadosIncorretos('O número digitado deve ser múltiplo de um dos números exibidos.')
+                }
+
+            }else{
+                //Caixa vazia
+                window.alert('Informe um valor')
+            }
+        }
+
+        //AUTH SAQUE-------------------Desenho das telas
+        function telaAuth(){
+            //Tela de aguardando
+            secao.innerHTML = ''
+
+            corFundo.classList.remove('bg-verde', 'bg-vermelho')
+            corFundo.classList.add('bg-azul')
+                
+            const textVerificar = document.createElement('p')
+            textVerificar.innerText = 'Aguarde a operação ser AUTORIZADA pelo seu banco.'
+            textVerificar.classList.add('botao-fundo')
+            secao.appendChild(textVerificar)
+            
+            setTimeout(function (){
+            //Verificação se saldo tem na conta
+            if(sessionStorage.op == '1'){
+
+                //Conta corrente
+                processandoAuth(sessionStorage.usSaldoCC)
+
+            }else 
+            if(sessionStorage.op == '2'){
+                //Conta poupança
+                processandoAuth(sessionStorage.usSaldoCP)
+            }else{
+                //Erro de operação não encontrada....
+            }
+            }, 4000)
+
+
+            //Processando se tem saldo na conta suficiente
+            function processandoAuth(conta){
+                let x = parseInt(conta) //geralmente recebemos uma string...
+                let y = parseInt(valorPre)
+
+                if(x > y){
+                    //Saldo suficiente
+                    conta = x - y
+                    if(sessionStorage.op == 1){sessionStorage.usSaldoCC = conta}
+                    if(sessionStorage.op == 2){sessionStorage.usSaldoCP = conta}
+
+                    setTimeout(function (){
+                    //Saldo insuficiente
+                    secao.innerHTML = ''
+
+                    corFundo.classList.remove('bg-vermelho', 'bg-azul')
+                    corFundo.classList.add('bg-verde')
+
+                    //voltar ao menu principal
+                    const textVerificar = document.createElement('p')
+                    textVerificar.innerText = 'Operação AUTORIZADA! retire o dinheiro no local indicado.'
+                    textVerificar.classList.add('botao-fundo')
+
+                    const img = document.createElement('img')
+
+                    img.src = 'img/ExeSaque.jpg' 
+                    secao.appendChild(textVerificar)
+                    secao.appendChild(img)
+
+                    //Nova Operação?
+                    setTimeout(function(){
+
+                        realizarNovaOp()
+
+                    }, 8000)
+
+                    }, 4000)
+
+                }else {
+
+                    setTimeout(function (){
+                    //Saldo insuficiente
+                    secao.innerHTML = ''
+
+                    corFundo.classList.remove('bg-verde', 'bg-azul')
+                    corFundo.classList.add('bg-vermelho')
+
+                    //voltar ao menu principal
+                    const textVerificar = document.createElement('p')
+                    textVerificar.innerText = `Você não tem saldo suficiente na sua ${tipoConta} para realizar esta operação!`
+                    textVerificar.classList.add('botao-fundo')
+                    secao.appendChild(textVerificar)
+
+                            setTimeout(function(){
+                                //voltando pro menu pra fazer outra coisa..
+                                //Como colocar moneny na conta
+                                window.location.href = 'menu.html' 
+                            }, 6000)
+                    }, 4000)
+                }
+            }
+        
+        
+            function realizarNovaOp(){
+                secao.innerHTML = ''
+
+                corFundo.classList.remove('bg-vermelho', 'bg-verde')
+                corFundo.classList.add('bg-azul')
+
+                //voltar ao menu principal
+                const text = document.createElement('p')
+
+
+                text.innerText = 'Deseja realizar uma nova operação?'
+                text.classList.add('botao-fundo')
+
+
+                linkVlt.innerText = 'Sim'
+
+                linkFim.setAttribute('href', 'index.html')
+                linkFim.innerText = 'Finalizar'
+
+                secao.appendChild(text)
+                secao.appendChild(sairSaqueBox)
+
+                linkFim.onclick = e => {
+
+                    e.preventDefault()
+
+                    secao.innerHTML = ''
+
+                    text.innerText = 'Obrigado por usar nossos serviços!'
+                    text.classList.add('botao-fundo')
+                    secao.appendChild(text)
+
+                    setTimeout(function(){ window.location.href = 'index.html' }, 4000)
+                    
+                }
+            }
+        }
+
+            function dadosIncorretos(msg){
+                secao.innerHTML = ''
+
+                corFundo.classList.remove('bg-verde', 'bg-azul')
+                corFundo.classList.add('bg-vermelho')
+                    
+                const text = document.createElement('p')
+                text.innerText = msg
+                text.classList.add('botao-fundo')
+
+                secao.appendChild(text)
+
+                setTimeout(function (){window.location.href = 'realizandoSaque.html'}, 4000)
+            }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Saque</title>
+
+    <style>
+        .bg-azul{
+        width: 100vw;
+        height: 100vh;
+        background: url("img/FundoB.png") no-repeat center;
+        background-color: rgb(27, 255, 255);
+        background-size: cover;
+
+    }
+    </style>
+
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+        <div class="container-lateral">
+
+            <div titulo-saque class="div-menu"> <!-- 1 -->
+                    <a link-sq-titulo class="botao-fundo">Você está fazendo um SAQUE, escolha uma das opções a seguir :</a>
+            </div>
+
+            <div menu-saque class="menu-extrato"><!-- 2 -->
+                <div saque-corrente class="div-menu">
+                    <a class="botao-fundo" href link-sq-cc="processamentoSenha.html">Conta Corrente</a>
+                </div>
+                <div saque-pupanca class="div-menu">
+                    <a class="botao-fundo" href link-sq-cp="processamentoSenha.html">Conta Poupança</a>
+                </div>
+            </div>
+
+            <div sair-saque class="div-menu"><!-- 3 -->
+                    <a link-sq-sair href="menu.html" class="botao-fundo">Voltar ao menu principal</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const linkCorrente = document.querySelector('[link-sq-cc]')
+        const linkPoupanca = document.querySelector('[link-sq-cp]')
+        const container = document.body
+        const oldContaner = container.innerHTML
+
+        let tentativas = parseInt(sessionStorage.tentativas)
+
+        let tipoOperacao = 0
+
+        //A referencia que está sendo usada é o arquivo processamentoSenha.html
+        //Mas toda a logica é feita aqui mesmo!
+        linkCorrente.onclick = e =>{
+            tipoOperacao = 1 //corrente
+            processamento(e)
+        }
+
+        linkPoupanca.onclick = e =>{
+            tipoOperacao = 2 //poupança
+            processamento(e)
+        }
+
+
+        function processamento(e){
+    
+
+
+            e.preventDefault()
+
+            fetch(linkCorrente.getAttribute('link-sq-cc'))
+                    .then(resp => resp.text())
+                    .then(html => {
+                        //A partir daqui, tudo é acessado pelo container
+                        container.innerHTML = html
+
+        //PROCESSAMENTO DA SENHA=================================
+        const btn = container.querySelector('[sq-sub-sh]')
+        const corFundo = container.querySelector('[cor-fundo]')
+        const secao = container.querySelector('[secao-process-sh]')
+
+
+        const oldMenu = secao.innerHTML
+
+        
+        let senha = 0
+
+        //se houver tentativas....
+
+
+        secao.removeChild(secao.children[2])
+        secao.appendChild(btn)
+        
+        //-------------------------------------
+        //ABRINDO PROCESSAMENTO DE SENHA
+        function processarSenha(){
+            let senha = 0
+            senha = document.getElementById('sq-inpt-sh').value //valor da senha digitada
+
+            if(senha.length == 4){
+                //SENHA CONTEM 4 DIGITOS, SEGUIR VERIFICAÇÃO---------------
+                
+                //TELA DE VERIFICAÇÃO DA SENHA-----------
+
+                secao.innerHTML = ''
+                
+                const textVerificar = document.createElement('p')
+                textVerificar.innerText = 'Aguarde enquanto verificamos sua senha'
+                textVerificar.classList.add('botao-fundo')
+                secao.appendChild(textVerificar)
+
+                setTimeout(function (){
+
+                //---------------------------------------
+
+                //OBTENDO DADOS DE CLIENTES PARA VERIFICAR , APOS A TELA DE VERIFICAÇÃO
+                //VAI MUDAR A TELA DE ACORDO COM ESSA VERIFICAÇÃO
+
+                    //faz a busca pelo cliente
+                    if(sessionStorage.usSenha == senha && tentativas > 0){
+                        //SUCESSO NA DIGITAÇÃO, SENHA EXISTENTE, SEGUIR
+                        //DESENHAR A TELA DE SUCESSO E SEGUIR A OPERAÇÃO
+                        sessionStorage.tentativas = 3
+
+                        secao.innerHTML = ''
+                        corFundo.classList.remove('bg-azul', 'bg-vermelho')
+                        corFundo.classList.add('bg-verde')
+
+                        const textS = document.createElement('p')
+                        textS.innerText = 'Senha correta!'
+                        textS.classList.add('botao-fundo')
+                        secao.appendChild(textS)
+
+                            //SEGUIR O ATENDIMENTO
+                            setTimeout(function (){
+
+                            sessionStorage.op = tipoOperacao //1 corrente / 2 poupança
+                            window.location.href = 'realizandoSaque.html'
+
+                        },4000)
+
+                    }else{
+                        tentativas -= 1
+                        sessionStorage.tentativas = tentativas //atualizando no 'server'
+
+                        if(tentativas >= 1){
+                        //ERRO, SENHA INCORRETA
+                        secao.innerHTML = ''
+                        corFundo.classList.remove('bg-azul', 'bg-verde')
+                        corFundo.classList.add('bg-vermelho')
+
+
+                        const textF = document.createElement('p')
+                        textF.innerText = `Senha incorreta! Você tem ${tentativas} tentativas`
+                        textF.classList.add('botao-fundo')
+                        secao.appendChild(textF)
+
+                        //RESETAR
+                        setTimeout(function (){
+                            secao.innerHTML = ''
+                            
+                            corFundo.classList.remove('bg-vermelho', 'bg-azul', 'bg-verde')
+                            corFundo.classList.add('bg-azul')
+
+                            secao.innerHTML = oldMenu
+                            /*Removendo o botão problemático e adicionando novamente...*/
+                            secao.removeChild(secao.children[2])
+                            secao.appendChild(btn)
+                        },4000)
+
+                    }else{
+                        secao.innerHTML = ''
+                            
+                        corFundo.classList.remove('bg-azul', 'bg-verde')
+                        corFundo.classList.add('bg-vermelho')
+
+                        const text = document.createElement('p')
+                        text.innerText = 'Sua conta foi bloqueada porque você errou sua senha mais de 3 vezes. Entre em contato com sua agência bancária! '
+                        text.classList.add('botao-fundo')
+                        secao.appendChild(text)
+
+                        setTimeout(function(){window.location.href = 'menu.html'}, 6000)
+                     }
+
+                    }
+
+                }, 3000)
+                //------------------------------------------------------------------
+
+            }else{
+                //ERRO NA DIGITAÇÃO DA SENHA--------------------------------------
+                window.alert('A senha deve conter no 4 digitos')
+            }
+
+        }
+
+
+        btn.onclick = e => {
+
+            e.preventDefault()
+
+
+            processarSenha()
+            
+        }       
+        
+        
+        })
+
+        }
+
+
+
+    </script>
+
+</body>
+</html>

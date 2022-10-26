@@ -1,0 +1,9 @@
+<clientes>
+<!-- Colocar senhas em um array de CHAR -->
+<!-- 1 tela de auth, redesenhada para cada dado, conta/ cod/ dataval, fazendo testes separadamente em cada um -->
+<!-- Colocar um cronometro para a sessão fechar-->
+    <cliente id="1" conta="889977" cod="9922" dataval="1129" codseg="598" nome="Augusto"  senha="2022" saldoCC="1000" saldoCP="10000"/>
+    <cliente id="2" conta="283744" cod="7766" dataval="1225" codseg="278" nome="Erika"    senha="9922" saldoCC="2000" saldoCP="6000"/>
+    <cliente id="3" conta="897364" cod="4547" dataval="0927" codseg="154" nome="Nathalia" senha="4413" saldoCC="6000" saldoCP="13000"/>
+    <cliente id="4" conta="445533" cod="6979" dataval="0523" codseg="342" nome="Thiago"   senha="7283" saldoCC="3000" saldoCP="20000"/>
+</clientes>

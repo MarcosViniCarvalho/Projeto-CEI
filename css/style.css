@@ -1,0 +1,528 @@
+body{
+    height: 100%;
+    margin: 0;
+
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.bem-vindo, .bg-azul, .bg-verde, .bg-vermelho{
+    
+    display: flex;
+    font-family: 'Courier New', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100vh;/*100% da view port , na altura*/
+
+
+    align-items: center;
+    
+    justify-content: space-between;
+    margin: 0;
+}    
+
+
+.bem-vindo.titulo , .bem-vindo.rodape{
+
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+   
+}
+
+.bem-vindo.titulo {
+
+    height: 20%;
+    justify-content: flex-end;
+    font-size: 100px;
+    
+}
+/*Video*/
+.vd {
+    height: 60%;
+    
+}
+.vd>div{
+    width: 100%;
+    height: 80%;
+   
+}
+
+#video-src{ 
+    border-radius: 20px;
+    box-shadow: 10px 10px 20px black;
+    max-height: 100%;
+    max-width: 100%;
+    background-color: black;
+    margin: 0 auto;
+
+}
+
+.vd h1{
+    height: 20%;
+
+    text-align: center;
+    font-size: 40px;
+}
+
+/*Rodapé*/
+.bem-vindo.rodape{
+
+    font-size: 50px;
+    height: 20%;
+    overflow: hidden;
+}
+
+a {
+   
+    text-decoration: none;
+    text-align: center;
+
+    color: black;
+}
+
+.container-meio{
+    height: 100vh;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+   
+}
+.titulo-meio{
+    
+    width: 80%;
+    font-size: 3em;
+    text-align: center;
+    padding: 2%;
+    font-style: oblique;
+
+}
+
+/*Botoes, Fundo*/
+.botao-fundo{
+    min-height: 1em;
+    padding: 10px;
+    background-color: rgb(42, 214, 226);
+    border-radius: 60px;
+    border: none;
+    box-shadow: 5px 5px 5px;
+    font-weight: bold;
+}
+/*Pagina menu*/
+.container-menu{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-principal{
+    height: 50%;
+    width: 50%;
+    min-height: 500px;
+    min-width: 500px;
+    display: flex;
+    
+    flex-direction: column;
+
+    justify-content: space-around;
+    align-items: center;
+}
+.div-menu {
+    width: 90%;
+    display:  flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+.div-menu a, .container-lateral{
+    width: 80%;
+    font-size: 50px;
+}   
+
+/*-------Saldo----*/
+
+.container-lateral{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+[titulo-extrato], [titulo-saque]{
+
+
+    display: flex;
+    align-items: center;
+    width: 1000px;
+}
+
+[menu-extrato], [menu-saque]{
+    height: 60%;
+    width: 1000px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    align-items: center;
+
+}
+
+.saldo-box{
+    height: 40%;
+    width: 80%;
+
+    font-size: 60px;
+    font-weight: bold;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 10px 10px 10px;
+    border-radius: 10px;
+    background-color: rgb(42, 214, 226);
+}
+.saldo-box p{
+    width: 90%;
+    text-align: center;
+    border-radius: 10px;
+    background-color: rgb(170, 234, 252);
+}
+
+[sair-extrato], [sair-saque]{
+    width: 1000px;
+
+    align-items: center;
+
+    justify-content: space-evenly;
+}
+
+[sair-extrato] .sc-vtl-ex{
+    width: 35%;
+
+    align-items: center;
+}
+
+/*Saque-----------------------------------------------*/
+[secao-process-sh]{
+    display: flex;
+    min-height: 600px;
+    width: 900px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 50%;
+
+}
+
+/*Moldura da area da senha*/
+[secao-process-sh] div{
+    height: 150px;
+    font-size: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(42, 214, 226);
+    box-shadow: 5px 5px 5px;
+    border-radius: 10px;
+    padding: 0;
+
+}
+
+/*Area da senha*/
+[secao-process-sh] div>input{
+    height: 110px;
+    width: 3em;
+    font-size: 1em;
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+    background-color: rgb(170, 234, 252);
+    padding: 0;
+}
+[secao-process-sh] p{
+    margin: 0;
+}
+
+[secao-process-sh] button{
+
+    border: none;
+
+    font-size: 50px;
+    font-family: 'Courier New', Courier, monospace;
+}   
+
+/*realizandoSaque*/
+[container-tela-saque-pos] , [container-tela-tra-pos]{
+    display: flex;
+    min-height: 600px;
+    max-width: 80%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+[container-tela-saque-pos] div{
+    height: 25%;
+    width: 100%;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+[titulo-saque-pos]{
+    padding: 10px;
+    align-items: center;
+    height: 100%;
+    min-height: 240px;
+}
+
+[container-tela-saque-pos]>p{
+    text-align: center;
+    font-size: 50px;
+}
+/*Imagem de exemplo*/
+[container-tela-saque-pos] img{
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px;
+    height: 50%;
+    width: 100%;
+}
+
+[titulo-saque-pos] [link-sq-titulo], .p-titulo-tra{
+    text-align: center;
+    font-size: 2.4em;
+    min-width: 2.4em;
+}
+
+
+[container-menu-numeros] {
+
+display: flex;
+min-height: 250px;
+justify-content: space-evenly;
+
+}
+
+[container-menu-numeros] section{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+/*Menu do meio--------------*/
+[container-menu-numeros] [menu-numeros-esqueda], [container-menu-numeros] [menu-numeros-direita]{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin: 10px;
+}
+[menu-numeros-esqueda]>button, [menu-numeros-direita]>button{
+    font-size: 60px;
+    width: 90%;
+    font-family: 'Courier New', Courier, monospace;
+}
+[painel-meio-digitavel]{
+    background-color: rgb(42, 214, 226);
+    box-shadow: 5px 5px 5px;
+    border-radius: 10px;
+}
+/*Esse estilo é aplicado a todas as caixas de texto digitaveis*/
+[painel-meio-digitavel]>input, .container-inpt-auth>input, #inpt-sq{
+
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+    background-color: rgb(170, 234, 252);
+    padding: 0;
+    width: 90%;
+    height: 80px;
+
+    font-size: 1em;
+}
+#inpt-sq{
+    font-size: 4em;
+}
+/*------------------------*/
+[sair-saque]{
+    display: flex;
+
+    justify-content: space-around;
+    align-items: center;
+    padding: 0;
+
+}
+[sair-saque] a{
+    margin: 10px;
+}
+
+/*Auth Usuario ------------------------------ */
+[secao-auth]{
+    height: 50%;
+    width: 60%;
+    max-width: 1100px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+[secao-auth] div {
+    
+    width: 100%;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+[titulo-auth]{
+    font-size: 40px;
+}
+
+[secao-auth] [img-exe]{
+    height: 70%;
+    width: 50%;
+    border-radius: 10px;
+}
+
+[secao-conteudo-auth]{
+
+    display: flex; 
+    justify-content: space-evenly;
+
+}
+.container-inpt-auth{
+    height: 70%;
+    width: 40%;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 10px 10px 10px;
+    border-radius: 10px;
+    background-color: rgb(42, 214, 226);
+}
+
+[btn-auth]{
+    height: 100%;
+    width: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 50px;
+
+}
+
+/*Transferencia -------------------*/
+[container-tela-tra-pos] .div-tra{
+    height: 25%;
+    width: 100%;
+
+}
+
+[container-conteudo-tra] {
+    display: flex;
+    flex-direction: column;
+
+}
+
+[container-conteudo-tra] section{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50%;
+    width: 100%;
+    padding: 10px;
+
+}
+
+.div-tra-content {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    
+}
+
+.div-tra-content div{
+    text-align:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85px;
+    width: 100%;
+
+}
+
+.div-tra-content p{
+    text-align:center;
+    display: flex;
+    justify-content: center;
+    font-size: 32px;
+    width: 100%;
+}
+
+[div-inp-tra]{
+    margin: 10px;
+    padding: 20px;
+    background-color: rgb(42, 214, 226);
+    box-shadow: 5px 5px 5px;
+    border-radius: 10px;
+}
+
+#inpt-tra-ag, #inpt-tra-conta{
+
+    text-align:center;
+    border: none;
+    border-radius: 20px;
+    background-color: rgb(170, 234, 252);
+    padding: 0;
+    width: 90%;
+    height: 50px;
+
+    font-size: 3em;
+}
+[container-tela-tra-pos]>.div-tra-final-menu{
+
+    height: 100%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+   
+}
+.div-final-check{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    padding: 20px;
+    width: 100%;
+    background-color: rgb(42, 214, 226);
+    box-shadow: 5px 5px 20px;
+    border-radius: 10px;
+}
+.p-titulo-tra{
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px ;
+    background-color: rgb(170, 234, 252);
+    padding: 0;;
+}
+/*-------------------------------*/

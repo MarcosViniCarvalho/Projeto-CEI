@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Extrato</title>
+    <style>
+        .bg-azul{
+        width: 100vw;
+        height: 100vh;
+        background: url("img/FundoB.png") no-repeat center;
+        background-color: rgb(27, 255, 255);
+        background-size: cover;
+
+    }
+</style>
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+        <div class="container-lateral">
+
+            <div titulo-extrato class="div-menu"> <!-- 1 -->
+                    <a link-ex-titulo class="botao-fundo">Você está vendo o seu SALDO, escolha uma das opções a seguir :</a>
+            </div>
+
+            <div menu-extrato class="menu-extrato"><!-- 2 -->
+                <div saldo-corrente class="div-menu">
+                    <a link-ex-cc class="botao-fundo">Conta Corrente</a>
+                </div>
+                <div saldo-pupanca class="div-menu">
+                    <a link-ex-cp class="botao-fundo">Conta Poupança</a>
+                </div>
+            </div>
+
+            <div sair-extrato class="div-menu"><!-- 3 -->
+                    <a link-ex-sair href="menu.html" class="botao-fundo">Voltar ao menu principal</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        /*Manipulação das 4 seções (titulo, menu lateral, conteudo, sair)*/
+        const titulo = document.querySelector('[link-ex-titulo]')
+
+        const menu = document.querySelector('[menu-extrato]')
+        const linkcc = document.querySelector('[link-ex-cc]')
+        const linkcp = document.querySelector('[link-ex-cp]')
+
+        const secaoSair = document.querySelector('[sair-extrato]')
+        const sairFinalizar = document.querySelector('[link-ex-sair]')
+
+        //Conta Corrente-------------------------
+        linkcc.onclick = function(e) {
+
+            /*Box do saldo, uma div+a*/
+            const box = document.createElement('div')
+            saldo = document.createElement('p')
+
+            
+            box.appendChild(saldo)
+            box.classList.add("saldo-box")
+
+            //este elemento contem as informações do saldo da conta
+            saldo.innerText = 'R$ ' + sessionStorage.usSaldoCC
+
+            titulo.innerHTML = "Seu saldo na <em> CONTA CORRENTE </em> é : "
+
+            //reset do menu, para fazer um novo
+            menu.innerHTML = ''
+            menu.appendChild(box)
+            
+            criaSAIR()
+        }
+        //Conta Poupança---------------------
+        linkcp.onclick = function(e) {  
+
+            /*Box do saldo, uma div+a*/
+            const box = document.createElement('div')
+            saldo = document.createElement('p')
+
+
+            box.appendChild(saldo)
+            box.classList.add("saldo-box")
+
+            //este elemento contem as informações do saldo da conta
+            saldo.innerText = 'R$ ' + sessionStorage.usSaldoCP
+
+            titulo.innerHTML = "Seu saldo na <em> CONTA POUPANÇA </em> é : "
+
+            //reset do menu, para fazer um novo
+            menu.innerHTML = ''
+            menu.appendChild(box)
+
+            criaSAIR()
+        }
+
+        //Seção SAIR--------------------------------
+        //desenhando na seção SAIR após a alteração
+        const voltar = document.createElement('a')
+        voltar.innerHTML = "Voltar"
+        voltar.classList.add("botao-fundo")
+
+
+        const sair = document.createElement('a')
+        sair.innerHTML = "Sair"
+        sair.classList.add("botao-fundo")
+        
+        voltar.onclick = e => {
+
+            window.location.href = "extrato.html"
+        }
+
+        sair.onclick = e => {
+            e.preventDefault()
+
+            const corpo = document.querySelector('.container-lateral') 
+            corpo.innerHTML = ''
+            
+            corpo.appendChild(titulo)
+            titulo.innerHTML = 'Obrigador por usar nossos serviços!'
+
+            setTimeout(function(){window.location.href = "index.html" }, 4000)
+
+        }
+        
+        function criaSAIR (){
+            secaoSair.innerHTML = ''
+            voltar.classList.add("sc-vtl-ex")
+            sair.classList.add("sc-vtl-ex")
+            secaoSair.appendChild(voltar)
+            secaoSair.appendChild(sair)
+        }
+
+    </script>
+</body>
+</html>

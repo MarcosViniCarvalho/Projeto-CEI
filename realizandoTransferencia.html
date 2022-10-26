@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Realizando Transferência</title>
+    <style>
+        .bg-azul{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoB.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+
+        }
+        .bg-vermelho{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoR.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+        .bg-verde{
+            width: 100vw;
+            height: 100vh;
+            background: url("img/FundoV.png") no-repeat center;
+            background-color: rgb(27, 255, 255);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div cor-fundo class="bg-azul">
+        <div container-tela-tra-pos class="container-meio">
+
+            <div class="div-tra" titulo-saque-pos> <!-- 1 -->
+                    <p link-sq-titulo class="botao-fundo">Informe os dados da conta que deseja transferir.</a>
+            </div>
+
+            <div class="div-tra" container-conteudo-tra><!-- 2 -->
+                <section secao-text-tra><!-- 2.1 -->
+                       <div class="div-tra-content"> <div class="botao-fundo"> <p >O número da CONTA deve conter 6 dígitos</p> </div> </div>
+                       <div class="div-tra-content"  div-inp-tra> <input id="inpt-tra-conta" autofocus maxlength="6" type="text"> </div>
+
+                </section>
+
+                <section secao-input-tra><!-- 2.2 inputs-->
+                    <div class="div-tra-content">  <div class="botao-fundo"> <p id='text-p'>O número da AGÊNCIA deve conter 4 dígitos</p></div> </div>
+                        <div class="div-tra-content" div-inp-tra> <input id="inpt-tra-ag" autofocus maxlength="4" type="text"/> </div>
+                </section>
+
+            </div>
+            <div sair-saque class="div-menu div-tra"> <!-- 3 -->
+                        <a link-sq-voltar href="menu.html" class="botao-fundo">Voltar</a>
+                        <a link-sq-finalizar href="" class="botao-fundo">Avançar</a>
+            </div>
+
+        </div>
+
+</div>
+<script>
+
+    //inputs....
+    const inputConta = document.getElementById('inpt-tra-conta')
+    const inputAg = document.getElementById('inpt-tra-ag')
+
+    //Secao completa
+    const secao = document.querySelector('[container-tela-tra-pos]')
+    const corFundo = document.querySelector('[cor-fundo]')
+
+    //Primeira parte
+    const secaoTitulo = document.querySelector('[titulo-saque-pos]')
+    const titulo = document.querySelector('[link-sq-titulo]')
+
+    //Segunda parte
+    const secaoInputs = document.querySelector('[container-conteudo-tra]')
+    const secaoInpt2 = document.querySelector('[secao-input-tra]')
+    const text = document.querySelector('#text-p') //O texto que aparece na hora de digitar o valor da tra
+
+    //Terceita parte
+    const sairTraBox = document.querySelector('[sair-saque]')
+
+    const btn1 = document.querySelector('[link-sq-voltar]')
+    const btn2 = document.querySelector('[link-sq-finalizar]')
+
+    //Links úteis
+    const linkVlt = document.querySelector('[link-sq-voltar]')
+    const linkFim = document.querySelector('[link-sq-finalizar]')
+
+    //Variaveis de interesse
+    let agencia = 0
+    let conta = 0
+
+    let valorTra = 0
+
+    let tipoConta = ''
+    if(sessionStorage.op == 1){tipoConta = 'CONTA CORRENTE'}
+    if(sessionStorage.op == 2){tipoConta = 'CONTA POUPANÇA'}
+
+    telaConta()
+
+
+    //Primeira tela
+    function telaConta(){
+        secao.innerHTML = ''
+        secao.appendChild(secaoTitulo)
+
+        titulo.innerHTML = 'Primeiro, Digite o número da CONTA'
+
+        secao.appendChild(secaoInputs)
+        secao.appendChild(sairTraBox)
+
+        const removedEle = document.querySelector('[secao-input-tra]')
+        secaoInputs.removeChild(removedEle)
+
+        btn2.onclick = e => {
+
+            e.preventDefault()
+
+            if(inputConta.value != '' && (inputConta.value).length > 5){
+                conta = parseInt(inputConta.value)
+                //Seguindo para a tela de agencia
+                telaAgencia()
+
+            }else{
+                window.alert('Informe um valor válido')
+            }
+
+        }
+    }
+
+    //Desenhando a tela de digitar agencia
+    function telaAgencia(){
+        secao.innerHTML = ''
+        secao.appendChild(secaoTitulo)
+
+        titulo.innerHTML = 'Agora digite o número da AGÊNCIA :'
+
+        secao.appendChild(secaoInputs)
+        secaoInputs.appendChild(secaoInpt2)
+        secao.appendChild(sairTraBox)
+
+        const removedEle = document.querySelector('[secao-text-tra]')
+        secaoInputs.removeChild(removedEle)
+
+        //Setando valores da agencia
+        btn2.onclick = e => {
+
+            e.preventDefault()
+
+            if(inputAg.value != '' && (inputAg.value).length > 3){
+                agencia = parseInt(inputAg.value)
+
+                //Seguindo para a tela de valor
+                telaValor()
+
+            }else{
+                window.alert('Informe um valor válido')
+            }
+
+        }
+
+    }
+
+    //Aqui digitamos o valor da transferência
+    function telaValor(){
+        secao.innerHTML = ''
+        secao.appendChild(secaoTitulo)
+
+        titulo.innerHTML = 'Digite o valor que deseja tansferir. OBS: O valor não pode ser maior que R$ 5.000 .'
+       
+        secao.appendChild(secaoInputs)
+        secaoInputs.innerHTML = ''
+
+        secaoInputs.appendChild(secaoInpt2)
+        text.innerHTML = 'Valor da transferência'
+
+        inputAg.value = ''
+        
+        secao.appendChild(sairTraBox)
+
+        inputAg.setAttribute('maxlength', '4')
+        //vamos usar o input da agencia - inputAg
+
+        btn2.onclick = e => {
+            e.preventDefault()
+
+
+
+            if(inputAg.value != ''){
+                valorTra = parseInt(inputAg.value)
+
+                //Seguindo para a autenticação
+                telaAuth()
+
+            }else{
+                window.alert('Informe um valor válido')
+            }
+        }
+
+    }
+
+    function telaAuth(){
+        //Aqui vamos somente conferir se o individuo possui saldo na conta
+        secao.innerHTML = ''
+        secao.appendChild(secaoTitulo)
+
+        titulo.innerHTML = 'Aguarde a operação ser AUTORIZADA pelo seu Banco.'
+
+        setTimeout(function (){
+
+            if(sessionStorage.op == 1){
+                //Conta corrente
+                processandoAuth(sessionStorage.usSaldoCC)
+
+            }else 
+            if(sessionStorage.op == 2){
+                //Conta poupança
+                processandoAuth(sessionStorage.usSaldoCP)
+
+            }else{
+                window.alert('Ocorreu um erro na operação....')
+                window.location.href = 'index.html'
+            }
+
+        }, 4000)
+
+
+        //Processando se tem saldo na conta suficiente
+        function processandoAuth(cont){
+            let x = parseInt(cont) //geralmente recebemos uma string...
+            let y = valorTra
+
+            if(x > y){
+                    //Saldo suficiente
+                    
+
+                    if(parseInt(sessionStorage.usConta) != parseInt(conta)){
+                        cont = x - y 
+                    }
+
+                    if(sessionStorage.op == 1){sessionStorage.usSaldoCC = cont}
+                    if(sessionStorage.op == 2){sessionStorage.usSaldoCP = cont}
+                    
+
+
+                    setTimeout(function (){
+                    //Saldo suficiente
+                    secao.innerHTML = ''
+
+                    corFundo.classList.remove('bg-vermelho', 'bg-azul')
+                    corFundo.classList.add('bg-verde')
+
+                    //Titulo
+                    secaoTitulo.classList.add('div-tra-final-menu')
+
+                    secao.appendChild(secaoTitulo)
+                    titulo.innerHTML = 'Operação AUTORIZADA! O prazo máximo para a conclusão da transferência é de 3 dias úteis.'
+
+                    //Conteudo
+                    const divFinal = document.createElement('div')
+                    divFinal.classList.add('div-final-check')
+
+                    const content = document.createElement('p')
+                    content.innerHTML = 
+                    `Conta : ${conta} <br>
+                    Agência : ${agencia} <br>
+                    Valor : R$ ${valorTra} <br>`
+
+                    content.classList.add('p-titulo-tra', 'botao-fundo')
+
+                    divFinal.appendChild(content)
+                    secaoTitulo.appendChild(divFinal)
+
+                    //Nova Operação?
+                    setTimeout(function(){
+                        secaoTitulo.removeChild(divFinal)
+                        realizarNovaOp()
+
+                    }, 10000)
+
+                    }, 4000)
+
+            }else {
+
+                    setTimeout(function (){
+                    //Saldo insuficiente
+                    secao.innerHTML = ''
+
+                    corFundo.classList.remove('bg-verde', 'bg-azul')
+                    corFundo.classList.add('bg-vermelho')
+
+                    //voltar ao menu principal
+                    secao.appendChild(secaoTitulo)
+                    titulo.innerText = `Você não tem saldo suficiente na sua ${tipoConta} para realizar esta operação!`
+
+                            setTimeout(function(){
+                                //voltando pro menu pra fazer outra coisa..
+                                //Como colocar moneny na conta
+                                window.location.href = 'menu.html' 
+                            }, 6000)
+                    }, 3000)
+                }
+            }
+            /*----------------------------------------------*/
+
+            
+
+    }
+    function realizarNovaOp(){
+                secao.innerHTML = ''
+
+                corFundo.classList.remove('bg-vermelho', 'bg-verde')
+                corFundo.classList.add('bg-azul')
+
+                //voltar ao menu principal
+                secaoTitulo.classList.remove('div-tra-final-menu')
+                secao.appendChild(secaoTitulo)
+
+
+                titulo.innerHTML = 'Deseja realizar uma nova operação?'
+
+
+                linkVlt.innerText = 'Sim'
+
+                linkFim.setAttribute('href', 'index.html')
+                linkFim.innerText = 'Finalizar'
+
+                secao.appendChild(sairTraBox)
+
+                //Finalizando...
+                linkFim.onclick = e => {
+
+                    e.preventDefault()
+
+                    secao.innerHTML = ''
+                    secao.appendChild(secaoTitulo)
+
+                    titulo.innerHTML = 'Obrigador por usar nossos serviços!'
+
+                    setTimeout(function(){ window.location.href = 'index.html' 
+                }, 4000)
+                    
+                }
+            }
+</script>
+</body>
+</html>
